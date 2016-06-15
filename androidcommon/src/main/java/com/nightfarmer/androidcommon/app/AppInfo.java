@@ -1,5 +1,6 @@
 package com.nightfarmer.androidcommon.app;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,11 +31,11 @@ public class AppInfo {
     }
 
     public static boolean isRunningForeground(Context context) {
-        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List taskList = am.getRunningTasks(1);
-        if(taskList != null && !taskList.isEmpty()) {
-            ComponentName componentName = ((ActivityManager.RunningTaskInfo)taskList.get(0)).topActivity;
-            if(componentName != null && componentName.getPackageName().equals(context.getPackageName())) {
+        if (taskList != null && !taskList.isEmpty()) {
+            ComponentName componentName = ((ActivityManager.RunningTaskInfo) taskList.get(0)).topActivity;
+            if (componentName != null && componentName.getPackageName().equals(context.getPackageName())) {
                 return true;
             }
         }
@@ -50,4 +51,27 @@ public class AppInfo {
         context.startActivity(Intent.createChooser(intentItem, dialogTitle));
     }
 
+    /**
+     * 检测程序是否有权限
+     *
+     * @param context     context
+     * @param permission  Manifest.permission.*
+     * @param packageName 包名
+     * @return result
+     */
+    public static boolean checkPermission(Context context, String permission, String packageName) {
+        PackageManager pm = context.getPackageManager();
+        return (PackageManager.PERMISSION_GRANTED == pm.checkPermission(permission, packageName));
+    }
+
+    /**
+     * 检测程序自己是否有权限
+     *
+     * @param context    context
+     * @param permission Manifest.permission.*
+     * @return result
+     */
+    public static boolean checkPermission(Context context, String permission) {
+        return checkPermission(context, permission, context.getPackageName());
+    }
 }

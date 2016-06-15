@@ -1,12 +1,18 @@
 package com.nightfarmer.androidcommon.recevier;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.nightfarmer.androidcommon.app.AppInfo;
 import com.nightfarmer.androidcommon.other.Check;
 
 import java.util.Iterator;
@@ -100,6 +106,15 @@ public class PhoneReceiver extends BroadcastReceiver {
             var3.printStackTrace();
         }
 
+    }
+
+    public static void callPhone(Context context, String phone) {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+        if (AppInfo.checkPermission(context, Manifest.permission.CALL_PHONE)) {
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context, "电话呼出被禁止", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static enum CallState {

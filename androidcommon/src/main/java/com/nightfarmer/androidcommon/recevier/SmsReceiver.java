@@ -84,6 +84,13 @@ public class SmsReceiver extends BroadcastReceiver {
 
     }
 
+    public static void newMsgToPhone(Context context, String phone, String msg) {
+        Uri uri = Uri.parse("smsto:" + phone);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.putExtra("sms_body", msg);
+        context.startActivity(intent);
+    }
+
     public static void sendMsgToPhone(String phone, String msg) {
         Log.i(TAG, "发送手机：" + phone + " ,内容： " + msg);
         if (Build.VERSION.SDK_INT >= 4) {
